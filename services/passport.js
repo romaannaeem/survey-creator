@@ -20,24 +20,24 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new GoogleStrategy(
     {
+      // This is where the actual authentication is being done.
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback',
       proxy: true // Doesn't switch back to http when going through Heroku proxy - stays as https and prevents error
     },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleId: profile.id }) // Becomes existingUser
-        .then(existingUser => {
-          if (existingUser) {
-            // We already have a record with the given profile ID
-            done(null, existingUser);
-          } else {
-            // We dont have a user record with this ID, make a new record
-            new User({ googleId: profile.id })
-              .save()
-              .then(user => done(null, user));
-          }
-        });
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id }); // Becomes existingUser
+
+      if (existingUser) {
+        // We already have a record with the given profile ID
+        return done(null, existingUser);
+      }
+
+      // Only runs if existingUser doesn't exist, because of the return statement
+      // We dont have a user record with this ID, make a new record
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );

@@ -4,15 +4,22 @@ module.exports = app => {
   app.get(
     '/auth/google',
     passport.authenticate('google', {
-      scope: ['profile', 'email']
+      scope: ['profile', 'email'] // We're asking Google for access to the user's profile and email
     })
   );
 
-  app.get('/auth/google/callback', passport.authenticate('google'));
+  // This will take the google OAuth callback and send it to the /surveys route!
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google'),
+    (req, res) => {
+      res.redirect('/surveys');
+    }
+  );
 
   app.get('/api/logout', (req, res) => {
     req.logout();
-    res.send(req.user);
+    res.redirect('/');
   });
 
   // A logged in user can get access to user
