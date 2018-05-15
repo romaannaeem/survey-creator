@@ -20,6 +20,9 @@ class Header extends Component {
           <li key="1">
             <Payments />
           </li>,
+          <li key="4">
+            <a href="/surveys">Dashboard</a>
+          </li>,
           <li key="3" style={{ margin: '0 10px ' }}>
             Credits: {this.props.auth.credits}
             {/* this.props.auth is coming from authReducer, so it automatically updates the header with the new value. How cool! */}
@@ -32,7 +35,6 @@ class Header extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <nav>
         <div className="nav-wrapper">
