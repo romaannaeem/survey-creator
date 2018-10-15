@@ -51,6 +51,7 @@ class Header extends Component {
   }
 }
 
+// Gives us auth piece of state
 function mapStateToProps({ auth }) {
   return {
     auth

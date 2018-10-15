@@ -29,6 +29,8 @@ export const fetchUser = () => async dispatch => {
 // Takes token we get from Stripe & sends it to the back end server
 export const handleToken = token => async dispatch => {
   const res = await axios.post('/api/stripe', token);
+
+  // Res.data gives back user from DB. Contains credits, googleId, and some mongo variables. Corresponds to res.send(user) from the billingRoutes.js file
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 
